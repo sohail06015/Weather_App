@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link rel="icon" type="image/x-icon" href="/images/clouds.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-slate-900 flex justify-center items-center h-screen">
+    <div class="bg-gradient-to-br from-green-500 to-indigo-600 bg-white rounded-3xl max-auto max-w-96 p-9 text-white">
+        <div class="search flex">
+            <input class="border-none outline-none bg-white text-gray-500 h-16 rounded-3xl text-lg pl-3  mr-6" type="text" name="" id="" placeholder="enter city name" spellcheck="false">
+            <button class="border-none outline-none bg-white rounded-full cursor-pointer w-16 h-16 flex justify-center items-center"><img src="images/search.png" class="w-6" alt=""></button>
+        </div>
+        <div class="flex flex-col justify-center items-center hidden weather">
+            <img src="images/rain.png" class="image" alt="">
+            <h1 class="mb-1 text-3xl font-semibold temp">32°C</h1>
+            <h2 class="mb-3 city">New Delhi</h2>
+            <div class="flex justify-between w-full">
+                <div class="flex flex-col items-center mr-4">
+                    <img src="images/humidity.png" class="w-8 mb-2" alt="">
+                    <p class="mb-1 humidity">50%</p>
+                    <p>Humidity</p>
+                </div>
+                <div class="flex flex-col items-center">
+                    <img src="images/wind.png" class="w-8 mb-2" alt="">
+                    <p class="mb-1 wind">50 km/h</p>
+                    <p>Wind Speed</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const apiKey = "357aa4ad2ec86edc3368f77250120f98";
+        const apiUrl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
+
+        const searchBox = document.querySelector(".search input");
+        const searchBtn = document.querySelector(".search button");
+        const weatherImage = document.querySelector(".image");
+
+        async function checkWeather(city) {
+            const response = await fetch(apiUrl + city + `&appid=${apiKey}`);
+
+
+            var data = await response.json();
+
+            console.log(data);
+            document.querySelector(".city").innerHTML = data.name;
+            document.querySelector(".wind").innerHTML = data.wind.speed + " km/h";
+            document.querySelector(".humidity").innerHTML = data.main.humidity + "%";
+            document.querySelector(".temp").innerHTML = data.main.temp + " °C";
+
+
+
+
+            const conditions = data.weather[0].main;
+
+            weatherImage.src = "images/" + conditions.toLowerCase() + ".png";
+
+
+            const weather = document.querySelector(".weather");
+
+            weather.classList.remove('hidden');
+            // box.classList.add('');
+            // document.querySelector(". image").innerHTML = 
+
+        }
+        searchBtn.addEventListener("click", () => {
+            checkWeather(searchBox.value);
+        })
+    </script>
+</body>
+
+</html>
